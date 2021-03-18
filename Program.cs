@@ -82,7 +82,7 @@ public class Graph
         string AkunSource = source;
         bool[] vis = new bool[numVertices];
         int[] level = new int[numVertices];
-        int i = 0;
+
         foreach (Vertex v in vertices)
         {
             vis[findVertexIdx(v.value)] = false;
@@ -94,7 +94,7 @@ public class Graph
         List<string> L = new List<string>();
         List<string> Friend = new List<string>();
         L.Add(source);
-
+        int lvl = 0;
         while (L.Any())
         {
             source = L.First();
@@ -113,16 +113,16 @@ public class Graph
                     }
                 }
             }
-            i++;
+            lvl++;
         }
         Console.Write("\n");
         Console.Write("\n");
         Console.Write("Daftar rekomendasi teman untuk akun {0}:  \n", AkunSource);
+        List<Tuple<string, int, List<string>>> Recs = new List<Tuple<string, int, List<string>>>();
         while (Friend.Any())
         {
             string s = Friend.First();
             Friend.RemoveAt(0);
-            Console.Write("Nama akun: {0}  ", s);
             int mutual = 0;
             List<string> Rec = new List<string>();
             foreach (string edge in vertices[findVertexIdx(s)].edges)
@@ -133,11 +133,19 @@ public class Graph
                     mutual++;
                 }
             }
-            Console.WriteLine(" ");
-            Console.WriteLine("mutual {0}", mutual.ToString());
-            foreach (string Recommendation in Rec)
+            Tuple<string, int, List<string>> RM = new Tuple<string, int, List<string>>(s, mutual, Rec);
+            Recs.Add(RM);
+        }
+        Recs = Recs.OrderByDescending(i => i.Item2).ToList();
+        foreach (var item in Recs)
+        {
+            string name = item.Item1;
+            int value = item.Item2;
+            Console.WriteLine("Nama akun: {0} ", name);
+            Console.WriteLine("{0} mutual friends:", value.ToString());
+            foreach (var items in item.Item3)
             {
-                Console.WriteLine("{0}", Recommendation);
+                Console.WriteLine("{0}", items);
             }
         }
     }
