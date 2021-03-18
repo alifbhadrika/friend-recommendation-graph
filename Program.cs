@@ -38,7 +38,6 @@ class Graph
 
     public void BFS(int source)
     {
-
         bool[] vis = Enumerable.Repeat((bool)false, vertex).ToArray();
 
         vis[source] = true;
@@ -65,6 +64,28 @@ class Graph
             }
         }
     }
+
+    static List<List<string>> parsingFile(string path)
+    {
+        try
+        {
+            List<List<string>> res = new List<List<string>>();
+            List<string> lines = System.IO.File.ReadAllLines(path).ToList();
+
+            lines = lines.Where((val, idx) => idx != 0).ToList();
+
+            foreach (string line in lines)
+            {
+                res.Add(line.Split(" ").ToList());
+            }
+
+            return res;
+        }catch(Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+    }
+
 
     static void Main(string[] args)
     {
