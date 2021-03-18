@@ -8,24 +8,26 @@
     "net5.0": []
   },
   "packageFolders": {
-    "C:\\Users\\ASUS ROG G531GD\\.nuget\\packages\\": {}
+    "C:\\Users\\ASUS\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\TubesStima2\\TubesStima2.csproj",
+      "projectUniqueName": "C:\\Data Karel\\IF-ITB\\IF Semester 4\\Stima\\friend-recommendation-graph\\TubesStima2.csproj",
       "projectName": "TubesStima2",
-      "projectPath": "D:\\TubesStima2\\TubesStima2.csproj",
-      "packagesPath": "C:\\Users\\ASUS ROG G531GD\\.nuget\\packages\\",
-      "outputPath": "D:\\TubesStima2\\obj\\",
+      "projectPath": "C:\\Data Karel\\IF-ITB\\IF Semester 4\\Stima\\friend-recommendation-graph\\TubesStima2.csproj",
+      "packagesPath": "C:\\Users\\ASUS\\.nuget\\packages\\",
+      "outputPath": "C:\\Data Karel\\IF-ITB\\IF Semester 4\\Stima\\friend-recommendation-graph\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\ASUS ROG G531GD\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\ASUS\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net5.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
