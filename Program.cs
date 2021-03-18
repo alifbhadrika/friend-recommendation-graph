@@ -61,6 +61,27 @@ class Graph
         Console.Write("\n");
     }
 
+    static List<List<string>> parsingFile(string path)
+    {
+        try
+        {
+            List<List<string>> res = new List<List<string>>();
+            List<string> lines = System.IO.File.ReadAllLines(path).ToList();
+
+            lines = lines.Where((val, idx) => idx != 0).ToList();
+
+            foreach (string line in lines)
+            {
+                res.Add(line.Split(" ").ToList());
+            }
+
+            return res;
+        }catch(Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+    }
+
     static void Main(string[] args)
     {
         Graph G = new Graph(10);
