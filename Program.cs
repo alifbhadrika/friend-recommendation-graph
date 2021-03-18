@@ -155,66 +155,87 @@ public class Graph
             Console.WriteLine("Tidak ada jalur koneksi yang tersedia\nAnda harus memulai koneksi baru itu sendiri.");
         }
 
-    }
-    private void printPath(List<string> path)
-    {
-        for (int i = 0; i < path.Count - 1; i++)
+        static List<List<string>> parsingFile(string path)
         {
-            Console.Write("{0} -> ", path[i]);
-        }
-        Console.Write("{0}", path[path.Count - 1]);
-        Console.WriteLine("\n{0} degree connection.", (path.Count) - 2);
-    }
-    private void dfs(string src, string dest, bool[] visited, List<string> path)
-    {
-        path.Add(src);
-        if (src == dest)
-        {
-            printPath(path);
-            visited[findVertexIdx(dest)] = true;
-            return;
-        }
-        visited[findVertexIdx(src)] = true;
-        if (visited[findVertexIdx(dest)] == false)
-        {
-            foreach (string edge in vertices[findVertexIdx(src)].edges)
+            try
             {
-                if (visited[findVertexIdx(edge)] == false)
+                List<List<string>> res = new List<List<string>>();
+                List<string> lines = System.IO.File.ReadAllLines(path).ToList();
+
+                lines = lines.Where((val, idx) => idx != 0).ToList();
+
+                foreach (string line in lines)
                 {
-                    dfs(edge, dest, visited, path);
+                    res.Add(line.Split(" ").ToList());
                 }
+
+                return res;
             }
-            path.RemoveAt(path.Count - 1);
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        static void Main(string[] args)
+        {
+            for (int i = 0; i < path.Count - 1; i++)
+            {
+                Console.Write("{0} -> ", path[i]);
+            }
+            Console.Write("{0}", path[path.Count - 1]);
+            Console.WriteLine("\n{0} degree connection.", (path.Count) - 2);
+        }
+        private void dfs(string src, string dest, bool[] visited, List<string> path)
+        {
+            path.Add(src);
+            if (src == dest)
+            {
+                printPath(path);
+                visited[findVertexIdx(dest)] = true;
+                return;
+            }
+            visited[findVertexIdx(src)] = true;
+            if (visited[findVertexIdx(dest)] == false)
+            {
+                foreach (string edge in vertices[findVertexIdx(src)].edges)
+                {
+                    if (visited[findVertexIdx(edge)] == false)
+                    {
+                        dfs(edge, dest, visited, path);
+                    }
+                }
+                path.RemoveAt(path.Count - 1);
+            }
         }
     }
-}
 
-class Program
-{
-    static void Main(string[] args)
+    class Program
     {
-        Graph g = new Graph(13);
-        g.addEdge("alif", "bhadrika");
-        g.addEdge("karel", "renaldi");
-        g.addEdge("karel", "bhadrika");
-        g.addEdge("rila", "karel");
-        g.addEdge("karel", "mandala");
-        g.print();
-        g.exploreFriendsDFS("karel", "alif");
-        Graph G = new Graph(13);
-        G.addEdge("A", "B");
-        G.addEdge("A", "C");
-        G.addEdge("A", "D");
-        G.addEdge("B", "C");
-        G.addEdge("B", "E");
-        G.addEdge("B", "F");
-        G.addEdge("C", "F");
-        G.addEdge("C", "G");
-        G.addEdge("D", "G");
-        G.addEdge("D", "F");
-        G.addEdge("E", "H");
-        G.addEdge("E", "F");
-        G.addEdge("F", "H");
-        G.friendRecommendationBFS("A");
+        static void Main(string[] args)
+        {
+            Graph g = new Graph(13);
+            g.addEdge("alif", "bhadrika");
+            g.addEdge("karel", "renaldi");
+            g.addEdge("karel", "bhadrika");
+            g.addEdge("rila", "karel");
+            g.addEdge("karel", "mandala");
+            g.print();
+            g.exploreFriendsDFS("karel", "alif");
+            Graph G = new Graph(13);
+            G.addEdge("A", "B");
+            G.addEdge("A", "C");
+            G.addEdge("A", "D");
+            G.addEdge("B", "C");
+            G.addEdge("B", "E");
+            G.addEdge("B", "F");
+            G.addEdge("C", "F");
+            G.addEdge("C", "G");
+            G.addEdge("D", "G");
+            G.addEdge("D", "F");
+            G.addEdge("E", "H");
+            G.addEdge("E", "F");
+            G.addEdge("F", "H");
+            G.friendRecommendationBFS("A");
+        }
     }
-}
