@@ -1,8 +1,15 @@
-﻿using System;
+// C# program to print BFS traversal 
+// from a given source vertex. 
+// BFS(int s) traverses vertices 
+// reachable from s. 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+// This class represents a directed 
+// graph using adjacency list 
+// representation 
 class Graph
 {
 
