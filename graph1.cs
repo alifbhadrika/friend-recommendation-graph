@@ -6,12 +6,12 @@ using System.Text;
 
 public class Vertex
 {
-    public char value;
-    public List<char> edges;
-    public Vertex(char _value)
+    public string value;
+    public List<string> edges;
+    public Vertex(string _value)
     {
         this.value = _value;
-        this.edges = new List<char>();
+        this.edges = new List<string>();
     }
 }
 
@@ -25,7 +25,7 @@ public class Graph
         this.vertices = new List<Vertex>();
     }
 
-    private void addVertex(char c)
+    private void addVertex(string c)
     {
         if (findVertex(c) == null)
         {
@@ -34,12 +34,12 @@ public class Graph
         return;
     }
 
-    private Vertex findVertex(char c)
+    private Vertex findVertex(string c)
     {
-            return vertices.Find(v => v.value == c);
+        return vertices.Find(v => v.value == c);
     }
 
-    private int findVertexIdx(char c)
+    private int findVertexIdx(string c)
     {
         for (int i = 0; i < numVertices; i++)
         {
@@ -51,7 +51,7 @@ public class Graph
         return -1;
     }
 
-    public void addEdge(char src, char dest)
+    public void addEdge(string src, string dest)
     {
         addVertex(src);
         addVertex(dest);
@@ -70,21 +70,21 @@ public class Graph
         for (int i = 0; i < vertices.Count; i++)
         {
             Console.Write("({0})-", vertices[i].value);
-            foreach (char edge in vertices[i].edges)
+            foreach (string edge in vertices[i].edges)
             {
                 Console.Write("{0} ", edge);
             }
             Console.WriteLine();
         }
     }
-    public void exploreFriendsDFS(char src, char dest)
+    public void exploreFriendsDFS(string src, string dest)
     {
         bool[] visited = new bool[numVertices];
         foreach (Vertex v in vertices)
         {
             visited[findVertexIdx(v.value)] = false;
         }
-        List<char> path = new List<char>();
+        List<string> path = new List<string>();
         dfs(src, dest, visited, path);
         if (visited[findVertexIdx(dest)] == false)
         {
@@ -92,7 +92,7 @@ public class Graph
         }
 
     }
-    private void printPath(List<char> path)
+    private void printPath(List<string> path)
     {
         for (int i = 0; i < path.Count - 1; i++)
         {
@@ -101,7 +101,7 @@ public class Graph
         Console.Write("{0}", path[path.Count - 1]);
         Console.WriteLine("\n{0} degree connection.", (path.Count) - 2);
     }
-    private void dfs(char src, char dest, bool[] visited, List<char> path)
+    private void dfs(string src, string dest, bool[] visited, List<string> path)
     {
         path.Add(src);
         if (src == dest)
@@ -113,7 +113,7 @@ public class Graph
         visited[findVertexIdx(src)] = true;
         if (visited[findVertexIdx(dest)] == false)
         {
-            foreach (char edge in vertices[findVertexIdx(src)].edges)
+            foreach (string edge in vertices[findVertexIdx(src)].edges)
             {
                 if (visited[findVertexIdx(edge)] == false)
                 {
@@ -130,22 +130,13 @@ class Program
     static void Main(string[] args)
     {
         Graph g = new Graph(13);
-        g.addEdge('A', 'Z');
-        g.addEdge('Z', 'O');
-        g.addEdge('O', 'S');
-        g.addEdge('S', 'F');
-        g.addEdge('S', 'R');
-        g.addEdge('F', 'B');
-        g.addEdge('B', 'P');
-        g.addEdge('P', 'C');
-        g.addEdge('R', 'C');
-        g.addEdge('P', 'R');
-        g.addEdge('D', 'R');
-        g.addEdge('M', 'D');
-        g.addEdge('M', 'L');
-        g.addEdge('T', 'L');
-        g.addEdge('A', 'T');
+        g.addEdge("alif", "bhadrika");
+        g.addEdge("karel", "renaldi");
+        g.addEdge("karel", "bhadrika");
+        g.addEdge("rila", "karel");
+        g.addEdge("karel", "mandala");
         g.print();
-        g.exploreFriendsDFS('A', 'B');
+        g.exploreFriendsDFS("karel", "alif");
+
     }
 }
