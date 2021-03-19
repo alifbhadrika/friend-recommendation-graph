@@ -219,7 +219,7 @@ public class Graph
             {
                 Console.Write(y + " ");
             }
-            Console.WriteLine("");
+            Console.WriteLine(" ");
         }
     }
 
