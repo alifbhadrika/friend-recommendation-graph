@@ -313,6 +313,79 @@ public class Graph
         }
 
     }
+    public void exploreFriendBFS(string src, string dest)
+    {
+        int level = 0;
+
+        List<List<string>> path = new List<List<string>>();
+
+        List<string> q = new List<string>();
+
+        bool[] visited = Enumerable.Repeat((bool)false, numVertices).ToArray();
+        bool isFinish = false;
+
+        visited[findVertexIdx(src)] = true;
+
+        q.Add(src);
+        q.Add(null);
+
+        path.Add(new List<string>() { src });
+
+        while (!isFinish && q.Count() > 1)
+        {
+            string temp = q.First();
+            q.RemoveAt(0);
+
+            if (temp == null)
+            {
+                level++;
+                q.Add(null);
+            }
+            else
+            {
+                List<string> path_temp = path.First().ConvertAll(val => val); // Deep Copy
+                path.RemoveAt(0);
+
+                foreach (string edge in vertices[findVertexIdx(temp)].edges)
+                {
+                    if (visited[findVertexIdx(edge)] == false)
+                    {
+                        visited[findVertexIdx(edge)] = true;
+
+                        q.Add(edge);
+                        List<string> path_temp_2 = path_temp.ConvertAll(val => val); // Deep Copy
+                        path_temp_2.Add(edge);
+                        path.Add(path_temp_2);
+
+                        if (visited[findVertexIdx(dest)] == true)
+                        {
+                            isFinish = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        if (isFinish)
+        {
+            Console.WriteLine("Nama akun: " + src + " dan " + dest);
+            for (int i = 0; i < path[path.Count - 1].Count - 1; i++)
+            {
+                Console.Write("{0} -> ", path[path.Count - 1][i]);
+            }
+            Console.Write("{0}\n", path[path.Count - 1][path[path.Count - 1].Count - 1]);
+            Console.WriteLine(level + "nd-degree connection");
+        }
+        else
+        {
+            Console.WriteLine("Nama akun: " + src + " dan " + dest);
+            Console.WriteLine("Tidak ada jalur koneksi yang tersedia");
+            Console.WriteLine("Anda harus memulai koneksi baru itu sendiri.");
+        }
+
+    }
     private void printPath(List<string> path)
     {
         for (int i = 0; i < path.Count - 1; i++)
