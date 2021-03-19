@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -149,6 +150,154 @@ public class Graph
             }
         }
     }
+    public void friendRecommendationDFS(string source)
+    {
+        bool[] vis = Enumerable.Repeat((bool)false, numVertices).ToArray();
+        Console.Write("\n");
+        Dictionary<string, int> maps = new Dictionary<string, int>();
+        Dictionary<string, List<string>> mutual = new Dictionary<string, List<string>>();
+        Dictionary<string, List<string>> mList = new Dictionary<string, List<string>>();
+        dfs1(source, 0, vis, ref maps, ref mutual);
+        foreach (var x in mutual)
+        {
+            foreach (var y in x.Value)
+            {
+                int res = maps[y];
+
+                if (mList.ContainsKey(y) && res == 2)
+                {
+                    mList[y].Add(x.Key);
+                }
+                else
+                {
+                    if (res == 2)
+                        mList[y] = new List<string> { x.Key };
+                }
+            }
+        }
+        var ListMutual = from pair in mList
+                         orderby pair.Value.Count descending
+                         select pair;
+        Console.Write("Daftar rekomendasi teman untuk akun {0}:  \n", source);
+        foreach (var x in ListMutual)
+        {
+            int value = x.Value.Count;
+            Console.WriteLine("Nama akun: {0} ", x.Key);
+            Console.WriteLine("{0} mutual friends:", value.ToString());
+            foreach (var y in x.Value)
+            {
+                Console.Write(y + " ");
+            }
+            Console.WriteLine("");
+        }
+    }
+
+    public void dfs1(string source, int depth, bool[] vis, ref Dictionary<string, int> L, ref Dictionary<string, List<string>> Mutual)
+    {
+        L[source] = depth;
+        if (depth == 2)
+        {
+            return;
+        }
+        vis[findVertexIdx(source)] = true;
+
+        foreach (string edge in vertices[findVertexIdx(source)].edges)
+        {
+            if (!vis[findVertexIdx(edge)])
+            {
+
+                if (depth == 1)
+                {
+                    if (Mutual.ContainsKey(source))
+                    {
+                        Mutual[source].Add(edge);
+                    }
+                    else
+                    {
+                        Mutual[source] = new List<string> { edge };
+                    }
+                }
+                dfs1(edge, depth + 1, vis, ref L, ref Mutual);
+            }
+        }
+        return;
+    }
+    public void FRDFS(string source)
+    {
+        bool[] visited = new bool[numVertices];
+
+        IDictionary<int, string> maps = new Dictionary<int, string>();
+        for (int i = 0; i < vertices.Count; i++)
+        {
+            maps.Add(i, vertices[i].value);
+        }
+        foreach (var m in maps)
+        {
+            Console.Write("{0} ", m);
+        }
+        for (int i = 0; i < vertices.Count; i++)
+        {
+            Console.Write("({0})-", vertices[i].value);
+            foreach (string edge in vertices[i].edges)
+            {
+                Console.Write("{0} ", edge);
+            }
+            Console.WriteLine();
+        }
+        int[,] Matrix = new int[vertices.Count, vertices.Count];
+        for (int i = 0; i < vertices.Count; i++)
+        {
+            for (int j = 0; j < vertices.Count; j++)
+            {
+                if (vertices[i].edges.Contains(maps[j]))
+                {
+                    Matrix[i, j] = 1;
+                }
+                else
+                {
+                    Matrix[i, j] = 0;
+                }
+                Console.Write("{0}", Matrix[i, j]);
+            }
+            Console.Write("\n");
+        }
+        int top, target;
+        int depth = 0;
+        Stack<int> s = new Stack<int>();
+        Console.WriteLine("{0} at depth {1}", source, depth);
+        s.Push(findVertexIdx(source));
+        visited[findVertexIdx(source)] = true;
+        depth = 0;
+        while (s.Count > 0)
+        {
+            top = s.Peek();
+            target = top;
+            while (target < numVertices)
+            {
+                if (depth < 2)
+                {
+
+                    if (Matrix[top, target] == 1 && visited[target] == false)
+                    {
+                        s.Push(target);
+                        visited[target] = true;
+                        depth++;
+                        Console.WriteLine("{0} at depth {1}", target, depth);
+                        top = target;
+                        target = 1;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+                target++;
+            }
+            s.Pop();
+            depth--;
+        }
+    }
+
     public void exploreFriendsDFS(string src, string dest)
     {
         bool[] visited = new bool[numVertices];
@@ -173,6 +322,7 @@ public class Graph
         Console.Write("{0}", path[path.Count - 1]);
         Console.WriteLine("\n{0} degree connection.", (path.Count) - 2);
     }
+
     private void dfs(string src, string dest, bool[] visited, List<string> path)
     {
         path.Add(src);
@@ -195,7 +345,6 @@ public class Graph
             path.RemoveAt(path.Count - 1);
         }
     }
-
 }
 
 class Program
@@ -253,6 +402,12 @@ class Program
         G.addEdge("E", "H");
         G.addEdge("E", "F");
         G.addEdge("F", "H");
-        G.friendRecommendationBFS("A");
+        Graph gg = new Graph(3);
+        gg.addEdge("1", "2");
+        gg.addEdge("2", "3");
+        gg.addEdge("1", "3");
+        G.friendRecommendationBFS("B");
+        Console.WriteLine("");
+        G.friendRecommendationDFS("A");
     }
 }
