@@ -51,7 +51,38 @@ public class Graph
         }
         return -1;
     }
+    private void printPath(List<string> path)
+    {
+        for (int i = 0; i < path.Count - 1; i++)
+        {
+            Console.Write("{0} -> ", path[i]);
+        }
+        Console.Write("{0}", path[path.Count - 1]);
+        Console.WriteLine("\n{0} degree connection.", (path.Count) - 2);
+    }
 
+    private void dfs(string src, string dest, bool[] visited, List<string> path)
+    {
+        path.Add(src);
+        if (src == dest)
+        {
+            printPath(path);
+            visited[findVertexIdx(dest)] = true;
+            return;
+        }
+        visited[findVertexIdx(src)] = true;
+        if (visited[findVertexIdx(dest)] == false)
+        {
+            foreach (string edge in vertices[findVertexIdx(src)].edges)
+            {
+                if (visited[findVertexIdx(edge)] == false)
+                {
+                    dfs(edge, dest, visited, path);
+                }
+            }
+            path.RemoveAt(path.Count - 1);
+        }
+    }
     public void addEdge(string src, string dest)
     {
         addVertex(src);
@@ -192,7 +223,7 @@ public class Graph
         }
     }
 
-    public void dfs1(string source, int depth, bool[] vis, ref Dictionary<string, int> L, ref Dictionary<string, List<string>> Mutual)
+    private void dfs1(string source, int depth, bool[] vis, ref Dictionary<string, int> L, ref Dictionary<string, List<string>> Mutual)
     {
         L[source] = depth;
         if (depth == 2)
@@ -222,97 +253,7 @@ public class Graph
         }
         return;
     }
-    public void FRDFS(string source)
-    {
-        bool[] visited = new bool[numVertices];
 
-        IDictionary<int, string> maps = new Dictionary<int, string>();
-        for (int i = 0; i < vertices.Count; i++)
-        {
-            maps.Add(i, vertices[i].value);
-        }
-        foreach (var m in maps)
-        {
-            Console.Write("{0} ", m);
-        }
-        for (int i = 0; i < vertices.Count; i++)
-        {
-            Console.Write("({0})-", vertices[i].value);
-            foreach (string edge in vertices[i].edges)
-            {
-                Console.Write("{0} ", edge);
-            }
-            Console.WriteLine();
-        }
-        int[,] Matrix = new int[vertices.Count, vertices.Count];
-        for (int i = 0; i < vertices.Count; i++)
-        {
-            for (int j = 0; j < vertices.Count; j++)
-            {
-                if (vertices[i].edges.Contains(maps[j]))
-                {
-                    Matrix[i, j] = 1;
-                }
-                else
-                {
-                    Matrix[i, j] = 0;
-                }
-                Console.Write("{0}", Matrix[i, j]);
-            }
-            Console.Write("\n");
-        }
-        int top, target;
-        int depth = 0;
-        Stack<int> s = new Stack<int>();
-        Console.WriteLine("{0} at depth {1}", source, depth);
-        s.Push(findVertexIdx(source));
-        visited[findVertexIdx(source)] = true;
-        depth = 0;
-        while (s.Count > 0)
-        {
-            top = s.Peek();
-            target = top;
-            while (target < numVertices)
-            {
-                if (depth < 2)
-                {
-
-                    if (Matrix[top, target] == 1 && visited[target] == false)
-                    {
-                        s.Push(target);
-                        visited[target] = true;
-                        depth++;
-                        Console.WriteLine("{0} at depth {1}", target, depth);
-                        top = target;
-                        target = 1;
-                    }
-                }
-                else
-                {
-                    return;
-                }
-                target++;
-            }
-            s.Pop();
-            depth--;
-        }
-    }
-
-    public void exploreFriendsDFS(string src, string dest)
-    {
-        bool[] visited = new bool[numVertices];
-        foreach (Vertex v in vertices)
-        {
-            visited[findVertexIdx(v.value)] = false;
-        }
-        List<string> path = new List<string>();
-        dfs(src, dest, visited, path);
-        if (visited[findVertexIdx(dest)] == false)
-        {
-            Console.WriteLine("Tidak ada jalur koneksi yang tersedia\nAnda harus memulai koneksi baru itu sendiri.");
-        }
-
-    }
     public void exploreFriendBFS(string src, string dest)
     {
         int level = 0;
@@ -386,37 +327,20 @@ public class Graph
         }
 
     }
-    private void printPath(List<string> path)
+    public void exploreFriendsDFS(string src, string dest)
     {
-        for (int i = 0; i < path.Count - 1; i++)
+        bool[] visited = new bool[numVertices];
+        foreach (Vertex v in vertices)
         {
-            Console.Write("{0} -> ", path[i]);
+            visited[findVertexIdx(v.value)] = false;
         }
-        Console.Write("{0}", path[path.Count - 1]);
-        Console.WriteLine("\n{0} degree connection.", (path.Count) - 2);
-    }
-
-    private void dfs(string src, string dest, bool[] visited, List<string> path)
-    {
-        path.Add(src);
-        if (src == dest)
-        {
-            printPath(path);
-            visited[findVertexIdx(dest)] = true;
-            return;
-        }
-        visited[findVertexIdx(src)] = true;
+        List<string> path = new List<string>();
+        dfs(src, dest, visited, path);
         if (visited[findVertexIdx(dest)] == false)
         {
-            foreach (string edge in vertices[findVertexIdx(src)].edges)
-            {
-                if (visited[findVertexIdx(edge)] == false)
-                {
-                    dfs(edge, dest, visited, path);
-                }
-            }
-            path.RemoveAt(path.Count - 1);
+            Console.WriteLine("Tidak ada jalur koneksi yang tersedia\nAnda harus memulai koneksi baru itu sendiri.");
         }
+
     }
 }
 
